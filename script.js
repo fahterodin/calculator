@@ -1,3 +1,5 @@
+// math functions
+
 const add = (a, b) => a + b;
 
 const subtract = (a, b) => a- b;
@@ -26,6 +28,8 @@ function operate (a, b, operator) {
             break;
     } result = +(result.toFixed(3));
 }
+
+// variables
 
 let result = '';
 let equalHit = false;
@@ -57,9 +61,7 @@ back.addEventListener('click', (e) => backSpace(e));
 
 document.addEventListener('keydown', (e) => writeKey(e));
 
-
-
-// function ok
+// interaction functions
 
 function writeKey(key) {
     const numbKey = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 190];
@@ -97,10 +99,6 @@ function clearAll() {
     result = '';
     op = '';
     equalHit = false;
-}
-
-function toggleNegativeNumber(operator) {
-    console.log(operator);
 }
 
 function backSpace() {
