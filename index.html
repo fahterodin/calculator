@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Calculator</title>
+    <title>Simple Calculator</title>
     <meta charset="utf-8">
     <script src = 'script.js' defer></script>
     <link rel = 'stylesheet' href="style.css">
+    <link rel="shortcut icon" type="image/jpg" href="/favicon.png"/>
 </head>
 <body>
+    <h1>Simple Calculator</h1>
     <div id = 'calc'>
         <div class = 'display'>
-            <div id = 'current'></div>
             <div id = 'history'></div>
+            <div id = 'current'></div>
+        </div>
+        <div class = 'row'>
+            <button id = 'clear'>Clear</button>
+            <button id = 'back'>Back</button>
         </div>
         <div class = 'row'>
             <button class = 'number'>7</button>
@@ -33,14 +39,13 @@
         <div class = 'row'>
             <button class = 'number'>0</button>
             <button class = 'number'>.</button>
-            <button id ='toggleNegative'>+/-</button>
+            <button id ='equal'>=</button>
             <button class = 'operator'>/</button>
         </div>
-        <div class = 'row'>
-            <button id = 'clear'>Clear</button>
-            <button id = 'equal'>=</button>
-        </div>
     </div>
-    
+    <div class="footer">
+        <span>fahterodin</span>
+        <a href='https://github.com/fahterodin/calculator' target="_blank"><img src='github.ico'></a>
+    </div>
 </body>
 </html>

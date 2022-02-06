@@ -19,18 +19,17 @@ function operate (a, b, operator) {
             break;
         case '/':
             if (b == 0) {
-                alert('You can\'t divide by zero!');
+                result = 'You can\'t divide by zero!';
                 return; 
             }
             result = divide(+a, +b);
             break;
-    } 
+    } result = +(result.toFixed(3));
 }
 
-let vault = '';
 let result = '';
-let tempOperator = '';
-let makeOp = false;
+let equalHit = false;
+let op = '';
 
 let current = document.getElementById('current');
 let history = document.getElementById('history');
@@ -38,7 +37,7 @@ const inputNumber = document.getElementsByClassName('number');
 const btnClear = document.getElementById('clear');
 const inputOperator = document.getElementsByClassName('operator');
 const equalOperator = document.getElementById('equal');
-const toggleNegativeBtn = document.getElementById('toggleNegative');
+const back = document.getElementById('back');
 
 //event listener
 
@@ -54,9 +53,35 @@ for (const operator of inputOperator) {
 
 equalOperator.addEventListener('click', (e) => equal(e));
 
-toggleNegativeBtn.addEventListener('click', (e) => toggleNegativeNumber(e));
+back.addEventListener('click', (e) => backSpace(e));
+
+document.addEventListener('keydown', (e) => writeKey(e));
+
+
 
 // function ok
+
+function writeKey(key) {
+    const numbKey = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 190];
+    const operKey = [56, 187, 189, 191]
+    const foundNum = numbKey.find(e => e == key.keyCode);
+    const foundOper = operKey.find(e => e == key.keyCode);
+    if (foundNum != undefined && key.key != '*') {
+        writeNumber(key.key);
+    }
+    if (foundOper != undefined && key.key != '=' && key.key != '8') {
+        writeOperator(key.key);
+    }
+    if (key.keyCode == 8) {
+        backSpace();
+    }
+    if (key.key == '=') {
+        equal();
+    }
+    if (key.key == 'Delete') {
+        clearAll();
+    }
+}
 
 function clearCurrent() {
     current.textContent = '';
@@ -70,102 +95,66 @@ function clearAll() {
     clearCurrent();
     clearHistory();
     result = '';
+    op = '';
+    equalHit = false;
 }
 
 function toggleNegativeNumber(operator) {
     console.log(operator);
 }
 
+function backSpace() {
+    history.textContent = history.textContent.slice(0, -1);
+}
+
 function writeNumber(number) {
-    if (makeOp == true) {
+    if (equalHit == true) {
         clearHistory();
-        makeOp = false;
+        equalHit = false;
     }
     history.textContent += number;
 }
 
 function writeOperator(operator) {
-    if (makeOp == true) {
+    if (equalHit == true) {
         history.textContent = result;
-        makeOp = false;
+        equalHit = false;
     }
     if (history.textContent == '' && result != '') {
         history.textContent = result;
     }
     history.textContent += ' ' + operator + ' ';
+    createArray();
+    if (op[0] == '') {
+        op.shift();
+    }
+    if (op[0] === '*' || op[0] === '/') {
+        clearAll();
+    }
+    if (op.length == 4) {
+        triggerOperate();
+    }
 }
 
 function equal() {
-    const op = history.textContent.split(' ');
+    createArray();
+    if (op.length != 3) {
+        return;
+    }
+    triggerOperate();
+    equalHit = true;
+}
+
+function triggerOperate() {
+    operate(op[0], op[2], op[1]);
+    op.splice(0, 3, result);
+    history.textContent = op.join(' ') + ' ';
+    current.textContent = result;
+}
+
+function createArray() {
+    op = history.textContent.split(' ');
     if (op[op.length - 1] === '') {
         op.pop();
     }
-    if (op.length % 2 == 0 || op.length == 1) {
-        return
-    }
-    for (i = op.length; i > 3; i = op.length) {
-        operate(op[0], op[2], op[1]);
-        op.splice(0, 3, result);
-    }
-    operate(op[0], op[2], op[1]);
-    current.textContent = result;
-    makeOp = true;
 }
-
-
-
-
-//functions
-
-function writeDisplay(item) {
-    writeNumber(item);
-    console.log(vault.length);
-    if (vault.length < 2) { 
-        if (typeof item === 'string') {
-            vault[0] = currentDisplay.textContent;
-            vault[1] = item;
-            clearCurrentDisplay();
-        }
-    } else if (vault.length = 2) {
-        equalResult(item);
-    }
-}
-
-
-function equalResult(item) {
-    if (typeof item === 'string') {
-        vault.push(currentDisplay.textContent);
-        result = operate(vault[0], vault[2], vault[1]);
-        resetVault();
-        clearCurrentDisplay();
-        writeResult();
-        vault[0] = result;
-        vault[1] = item;
-        console.log(vault);
-    }
-}
-
-function writeResult() {
-    currentDisplay.textContent = result;
-}
-
-function resetVault() {
-    vault.length = 0;
-}
-
-
-
-
-
-
-
-
-// pseudocode per quando clicco su operatore:
-// la funzione prende il numero che si trova nel currentDisplay e lo prende come operando
-// variabile operatore letta dall'event listener
-// prende questi valori e li mette su last display
-
-
-//prende il testo del bottone operatore, lo salva
-
-
